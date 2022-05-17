@@ -247,7 +247,6 @@ if __name__ == "__main__":
     view20_path = '/root/MINJU/data/20view_dataset_562_2000'
     # classes = os.listdir(view20_path)
     classes = ['D']
-    sys.exit()
 
     args = []
     for cls in classes:
