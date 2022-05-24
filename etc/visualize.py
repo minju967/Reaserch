@@ -17,7 +17,7 @@ for thr in range(0, 20, 2):
                 count_dic['A'] += 1
             total_dic['A'] += 1
         elif line[1] == 'D':
-            if int(line[-1]) < thr:
+            if int(line[-1]) <= thr:
                 count_dic['D'] += 1
             total_dic['D'] += 1
 
