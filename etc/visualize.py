@@ -27,7 +27,6 @@ for thr in range(0, 20, 2):
     print(round(count_dic['E'] / total_dic['E'], 3), round(count_dic['D'] / total_dic['D'], 3))
     f.close()
 
-
 # plt.plot(threshold, A_acc, label='E_Class')
 # plt.plot(threshold, D_acc, label='D_Class')
 # plt.xlabel('Threshold')
