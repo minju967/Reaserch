@@ -7,8 +7,8 @@ def draw_result():
     count_dic = {'A': 0, 'B': 0, 'D': 0, 'E': 0}
     total_dic = {'A': 0, 'B': 0, 'D': 0, 'E': 0}
 
-    a_thre = 18
-    b_thre = 4
+    a_thre = 14
+    b_thre = 3
     e_thre = 4
     for line in rdr:
         if line[1] == 'A':
@@ -62,10 +62,10 @@ def main():
             label = line[1]
             total_dic[label] += 1
             if line[1] != cls:
-                if int(line[4]) <= limit:
+                if int(line[3]) <= limit:
                     count_dic[label] += 1
             else:
-                if int(line[4]) > limit:
+                if int(line[3]) > limit:
                     count_dic[label] += 1
 
         a_acc.append(round(count_dic['A'] / total_dic['A'], 3))
@@ -75,27 +75,33 @@ def main():
 
         f.close()
 
+    print(e_acc)
+    print(d_acc)
+
     avg = []
     for i in range(len(a_acc)):
-        total = sum([a_acc[i], b_acc[i], d_acc[i], e_acc[i]])
-        avg_acc = round(total/4, 3)
+        # total = sum([a_acc[i], b_acc[i], d_acc[i], e_acc[i]])
+        # avg_acc = round(total / 4, 3)
+        total = sum([e_acc[i], d_acc[i]])
+        avg_acc = round(total/2, 3)
         avg.append(avg_acc)
 
+    print(avg)
     print(avg.index(max(avg)))
-    plt.plot(threshold, avg, label='AVG_Acc')
+    # plt.plot(threshold, avg, label='AVG_Acc')
 
-    # plt.plot(threshold, a_acc, label='B_Class')
-    # plt.plot(threshold, b_acc, label='B_Class')
-    # plt.plot(threshold, d_acc, label='D_Class')
-    # plt.plot(threshold, e_acc, label='E_Class')
+    plt.plot(threshold, a_acc, label='A_Class')
+    plt.plot(threshold, b_acc, label='B_Class')
+    plt.plot(threshold, d_acc, label='D_Class')
+    plt.plot(threshold, e_acc, label='E_Class')
 
     # plt.plot(threshold, b_acc, label='B_Class')
     # plt.plot(threshold, d_acc, label='D_Class')
 
     plt.xlabel('Threshold')
     plt.ylabel('Accuracy')
-    plt.legend(loc='best', ncol=4)
-
+    # plt.legend(loc='best', ncol=4)
+    plt.legend(loc='best', ncol=2)
     plt.show()
 
 
