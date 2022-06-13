@@ -1,4 +1,6 @@
+import glob
 import os.path
+import sys
 
 import selectivesearch
 import cv2
@@ -19,7 +21,6 @@ def search_region(image, f):
 
     for rect in cand_rects:
         # 테두리 제외
-        print(rect)
         if rect[0] == 0 and rect[3] == 999:
             continue
         img_rgb_copy = img_rgb.copy()
@@ -37,15 +38,30 @@ def search_region(image, f):
             key = cv2.waitKey()
             if key == ord('s'):
                 # bounding box 이미지, info.txt 저장
-                crop = image[top-10:bottom+10, left-10:right+10]
-                file_name = f'{save_dir}\\{str(random.random())[2:6]}.png'
-                # cv2.imshow('img', crop)
-                cv2.imwrite(file_name, crop)
-                f.write(f'[{top-10} {bottom+10} {left-10} {right+10}]')
-
+                try:
+                    crop = image[top-10:bottom+10, left-10:right+10]
+                    file_name = f'{img_save_dir}\\{str(random.random())[2:6]}.png'
+                    # cv2.imshow('img', crop)
+                    cv2.imwrite(file_name, crop)
+                    f.write(f'[{top - 10} {bottom + 10} {left - 10} {right + 10}]')
+                except:
+                    crop = image[top:bottom, left:right]
+                    file_name = f'{img_save_dir}\\{str(random.random())[2:6]}.png'
+                    # cv2.imshow('img', crop)
+                    cv2.imwrite(file_name, crop)
+                    f.write(f'[{top} {bottom} {left} {right}]')
+                cv2.destroyAllWindows()
+                break
             elif key == ord('d'):
                 cv2.destroyAllWindows()
                 break
+            elif key == ord('q'):
+                sys.exit()
+            elif key == ord('p'):
+                f.write(f'[]')
+                cv2.destroyAllWindows()
+                return 0
+    return 1
 
 def create_view(mesh, view_idx):
     obj_name = os.path.basename(path).replace('.obj', '')
@@ -71,13 +87,35 @@ def create_view(mesh, view_idx):
     image = plotter.screenshot(return_img=True)
     return image, image_name
 
-path = 'C:\\Users\\user\\PycharmProjects\\Reaserch\\data_sample\\obj\\E_class.obj'
-mesh = pv.read(path)
-save_dir = 'C:\\Users\\user\\PycharmProjects\\Reaserch\\Region_proposal\\save_file'
-for i in range(6):
-    image, name = create_view(mesh, i)
-    txt_f = f'{save_dir}\\{name}.txt'
-    f = open(txt_f, 'a')
-    f.write(name+'.png')
-    search_region(image, f)
-    f.close()
+dir_path = 'D:\\project\\data_alignment\\E_train'
+data = glob.glob(dir_path + '\\*.obj')
+img_save_dir = 'C:\\Users\\user\\PycharmProjects\\Reaserch\\Region_proposal\\save_file\\wire_image'
+txt_save_dir = 'C:\\Users\\user\\PycharmProjects\\Reaserch\\Region_proposal\\save_file\\wire_position'
+save_f = 'C:\\Users\\user\\PycharmProjects\\Reaserch\\Region_proposal\\save_file\\save.txt'
+w_file = open(save_f, 'a')
+r_file = open(save_f, 'r')
+files = r_file.readlines()
+files = [file.strip() for file in files]
+
+for path in data:
+    if path.strip() not in files:
+        w_file.write(path+'\n')
+        print(path.strip())
+    else:
+        print(f'exist file: {path}')
+        continue
+
+    mesh = pv.read(path)
+
+    for i in range(6):
+        image, name = create_view(mesh, i)
+        txt_f = f'{txt_save_dir}\\{name}.txt'
+        f = open(txt_f, 'a')
+        f.write(name+'.png')
+        result = search_region(image, f)
+        if result == 0:
+            f.close()
+            continue
+        f.close()
+
+    print()
