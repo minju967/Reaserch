@@ -16,5 +16,5 @@ D:\project\data_alignment\E_train\216.obj
 D:\project\data_alignment\E_train\217.obj
 D:\project\data_alignment\E_train\217_C.obj
 D:\project\data_alignment\E_train\310.obj
-
-
+D:\project\data_alignment\E_train\311.obj
+D:\project\data_alignment\E_train\311_B.obj

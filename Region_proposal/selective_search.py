@@ -97,25 +97,28 @@ r_file = open(save_f, 'r')
 files = r_file.readlines()
 files = [file.strip() for file in files]
 
-for path in data:
-    if path.strip() not in files:
-        w_file.write(path+'\n')
-        print(path.strip())
-    else:
-        print(f'exist file: {path}')
-        continue
-
-    mesh = pv.read(path)
-
-    for i in range(6):
-        image, name = create_view(mesh, i)
-        txt_f = f'{txt_save_dir}\\{name}.txt'
-        f = open(txt_f, 'a')
-        f.write(name+'.png')
-        result = search_region(image, f)
-        if result == 0:
-            f.close()
+try:
+    for path in data:
+        if path.strip() not in files:
+            w_file.write(path+'\n')
+            print(path.strip())
+        else:
+            print(f'exist file: {path}')
             continue
-        f.close()
 
-    print()
+        mesh = pv.read(path)
+
+        for i in range(6):
+            image, name = create_view(mesh, i)
+            txt_f = f'{txt_save_dir}\\{name}.txt'
+            f = open(txt_f, 'a')
+            f.write(name+'.png')
+            result = search_region(image, f)
+            if result == 0:
+                f.close()
+                continue
+            f.close()
+
+        print()
+except:
+    w_file.close()
